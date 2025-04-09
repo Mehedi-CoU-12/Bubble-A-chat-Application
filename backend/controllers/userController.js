@@ -28,11 +28,41 @@ export const register=async(req,res)=>{
             fullName,
             username,
             password:hashPassword,
-            profilePhoto:(gender===male)?maleAvater:femaleAvater,
+            profilePhoto:(gender==="male")?maleAvater:femaleAvater,
             gender
         })
 
+        return res.status(201).json({
+            message:"Account created successfully!",
+            success:true
+        })
+
     } catch (error) {
-        
+        console.log(error);
     }
 };
+
+export const login=async(req,res)=>{
+    const {username,password}=req.body;
+
+    if(!username || !password)
+        return res.status(400).json({message:"All field are required!"});
+
+    const user=await User.findOne({username});
+
+    if(!user){
+        return res.status(400).json({
+            message:"invalid username or password!",
+            success:false
+        })
+    }
+
+    const isPasswordMatch=await bcrypt.compare(password,user.password);
+
+    if(!isPasswordMatch){
+        return res.status(400).json({
+            message:"invalid username or password!",
+            success:false
+        })
+    }
+}
