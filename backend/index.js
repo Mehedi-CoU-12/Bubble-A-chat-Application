@@ -1,8 +1,10 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
+
 import connectDB from './config/database.js';
 import userRouter from './routes/userRoutes.js';
-import cookieParser from 'cookie-parser';
+import messageRouter from './routes/messageRoutes.js';
 
 dotenv.config();
 
@@ -15,6 +17,7 @@ app.use(cookieParser());
 
 //routes
 app.use("/api/v1/user",userRouter);
+app.use('/api/v1/message',messageRouter);
 
 
 connectDB();
