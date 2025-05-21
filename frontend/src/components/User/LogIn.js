@@ -2,6 +2,7 @@ import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import {Link} from 'react-router-dom'
 import { useState } from "react";
+import axios from "axios";
 
 function LogIn() {
 
@@ -10,10 +11,34 @@ function LogIn() {
         password:''
     });
 
-    const handleSubmit=(e)=>{
+    const handleSubmit=async(e)=>{
         e.preventDefault();
 
+        console.log(user)
 
+        const config={
+            headers:{
+                'Content-Type':'application/json'
+            },
+            withCredentials:true
+        }
+
+        try {
+
+            const {data}=await axios.post(`http://localhost:8080/api/v1/user/login`,user,config);
+            
+            console.log(data);
+
+
+        } catch (error) {
+            console.log(error);
+        }
+
+
+        setUser({
+            username:'',
+            password:'',
+        })
     }
 
     return (
@@ -31,7 +56,7 @@ function LogIn() {
                             value={user.username}
                             onChange={(e)=>setUser({...user,username:e.target.value})}
                             className="w-full pl-10 pr-3 py-2 rounded-lg border border-gray-300 focus:outline-none bg-gray-300 text-black"
-                            type="email"
+                            type="text"
                             placeholder="Username"
                         />
                     </div>
